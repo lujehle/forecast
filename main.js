@@ -31,7 +31,7 @@ L.control.scale({
 }).addTo(map);
 
 //MET Norway visualisieren um forecast als popup zu bekommen
-async function showForecast(latlng){
+async function showForecast(latlng) {
     //console.log("Popup erzeugen bei", latlng);
     let url = `https://api.met.no/weatherapi/locationforecast/2.0/compact?lat=${latlng.lat}&lon=${latlng.lng}`; // erster klick innsbruck, dann in link immerkoordinaten von geklickter stelle
     //console.log(url)
@@ -42,7 +42,7 @@ async function showForecast(latlng){
     //popup erzeugen
     let details = jsondata.properties.timeseries[0].data.instant.details //verweisst auf details
     let timestamp = new Date(jsondata.properties.meta.updated_at);
-    let markup =`
+    let markup = `
         <h3>Wettervorhersage für ${timestamp.toLocaleString()}</h3>
     <ul>
         <li> Luftdruck (hPa): ${details.air_pressure_at_sea_level}</li>
@@ -53,12 +53,18 @@ async function showForecast(latlng){
         <li>Windgeschwindigkeit (km/h): ${details.wind_speed}</li>
     </ul>
     `;
+    // Wettericons für die nächsten 24 Stunden in 3 Stunden Schritten
+    for (let i = 0; i <= 24; i += 3) { //immer um 3 erhöhen, dreierschritte
+        let symbol = jsondata.properties.timeseries[i].data.next_1_hours.summary.symbol_code;
+        
+        markup += `<img src = "icons/${symbol}.svg"> style = "width: 32px">`;
 
- 
-    
+    }
+
+
     L.popup([
         latlng.lat, latlng.lng
-    ],{
+    ], {
         content: markup
 
     }).openOn(overlays.forecast);
@@ -66,7 +72,7 @@ async function showForecast(latlng){
 }
 
 //auf Kartenklick reagieren
-map.on("click", function(evt){  //latlng über klick holen
+map.on("click", function (evt) {  //latlng über klick holen
     showForecast(evt.latlng) //koordinaten übergeben und funktion ausführen
 })
 
