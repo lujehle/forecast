@@ -35,3 +35,12 @@ L.control.scale({
 map.on("click", function(evt){  //latlng über klick holen
     console.log(evt.latlng);
 })
+
+// Klick auf Innsbruck simulieren map fire beziht sich auf map.on klick
+map.fire("click", {
+    latlng: {
+        lat: ibk.lat,
+        lng: ibk.lng,
+    }
+
+})
