@@ -30,10 +30,16 @@ L.control.scale({
     imperial: false,
 }).addTo(map);
 
+//MET Norway visualisieren um forecast als popup zu bekommen
+async function showForecast(latlng){
+    console.log("Popup erzeugen bei", latlng);
+
+}
 
 //auf Kartenklick reagieren
 map.on("click", function(evt){  //latlng über klick holen
     console.log(evt.latlng);
+    showForecast(evt.latlng) //koordinaten übergeben und funktion ausführen
 })
 
 // Klick auf Innsbruck simulieren map fire beziht sich auf map.on klick
