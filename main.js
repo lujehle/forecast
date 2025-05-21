@@ -23,6 +23,7 @@ let layerControl = L.control.layers({
 }, {
     "Wettervorhersage MET Norway": overlays.forecast,
     "ECMWF Windvorhersage": overlays.wind,
+    
 }).addTo(map);
 
 // Maßstab
@@ -89,10 +90,49 @@ async function showForecast(latlng) {
 
 }
 
+//ECMWF Winddaten mit Pfeilen
+async function showWindDir() {
+    let url = "https://geographie.uibk.ac.at/data/ecmwf/data/wind-10u-10v-europe.json";
+    let response = await fetch(url);
+    let jsondata = await response.json();
+   // Leaflet Velocity Layer erzeugen
+   let velocityLayer = L.velocityLayer({
+    displayValues: true, //zeigt unten links live werte an
+    displayOptions: {
+        velocityType: "Wind",
+        displayPosition: "bottomleft",
+        emptyString: "Keine Winddaten verfügbar",
+    },
+    data: jsondata,
+    minVelocity: 0,
+    maxVelocity: 20,
+    velocityScale: 0.010,
+    lineWidth: 1.5,
+    colorScale: [
+        "#3288bd", "#66c2a5", "#abdda4", "#e6f598",
+        "#fee08b", "#fdae61", "#f46d43", "#d53e4f"
+    ],
+    opacity: 0.97
+}).addTo(overlays.wind);
+}
+
+
+
+
+
+
+    
+
+
+
+    
+
 //auf Kartenklick reagieren
 map.on("click", function (evt) {  //latlng über klick holen
     showForecast(evt.latlng) //koordinaten übergeben und funktion ausführen
 })
+// ECMWF Windlayer laden
+showWindDir();
 
 // Klick auf Innsbruck simulieren map fire beziht sich auf map.on klick
 map.fire("click", {
