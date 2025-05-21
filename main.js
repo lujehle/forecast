@@ -103,15 +103,22 @@ async function showWindDir() {
         displayPosition: "bottomleft",
         emptyString: "Keine Winddaten verfügbar",
     },
-    data: jsondata,
+    data: jsondata, // daten aus https://geographie.uibk.ac.at/data/ecmwf/data/wind-10u-10v-europe.json
     minVelocity: 0,
     maxVelocity: 20,
-    velocityScale: 0.010,
+    velocityScale: 0.015,
     lineWidth: 1.5,
     colorScale: [
-        "#3288bd", "#66c2a5", "#abdda4", "#e6f598",
-        "#fee08b", "#fdae61", "#f46d43", "#d53e4f"
+        "#0000ff", // tiefblau
+        "#0055ff", // kräftiges blau
+        "#00ccff", // türkis
+        "#00ff66", // hellgrün
+        "#ffff00", // gelb
+        "#ff9900", // orange
+        "#ff0000", // rot
+        "#990000"  // dunkelrot (sehr stark)
     ],
+    
     opacity: 0.97
 }).addTo(overlays.wind);
 }
