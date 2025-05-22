@@ -23,7 +23,7 @@ let layerControl = L.control.layers({
 }, {
     "Wettervorhersage MET Norway": overlays.forecast,
     "ECMWF Windvorhersage": overlays.wind,
-    
+
 }).addTo(map);
 
 // Maßstab
@@ -98,27 +98,32 @@ async function showWindDir() {
     console.log(jsondata[0].header.refTime);
     console.log(jsondata[0].header.forecastTime);
     let forecastDate = new Date(jsondata[0].header.refTime);
-    forecastDate.setHours(forecastDate.getHours + jsondata[0].header.forecastTime);
+    forecastDate.setHours(forecastDate.getHours() + jsondata[0].header.forecastTime);
     console.log(forecastDate);
-  
-   // Leaflet Velocity Layer erzeugen
-   let velocityLayer = L.velocityLayer({
-    displayValues: true, //zeigt unten links live werte an
-    displayOptions: {
-        velocityType: "Wind",
-        position: "bottomright",
-        emptyString: "Keine Winddaten verfügbar",
-        speedUnit: "k/h"
-    },
-    data: jsondata, // daten aus https://geographie.uibk.ac.at/data/ecmwf/data/wind-10u-10v-europe.json
-    minVelocity: 0,
-    maxVelocity: 20,
-    velocityScale: 0.015,
-    lineWidth: 1.5,
+    let forecastSpan = document.querySelector("#forecast-link");
+    //console.log(forecastSpan);
+    forecastSpan.innerHTML = `
+    <a href = "${url}" target = "met.no">${forecastDate.toLocaleString()}</a>
+    `
 
-    
-    opacity: 0.97
-}).addTo(overlays.wind);
+    // Leaflet Velocity Layer erzeugen
+    let velocityLayer = L.velocityLayer({
+        displayValues: true, //zeigt unten links live werte an
+        displayOptions: {
+            velocityType: "Wind",
+            position: "bottomright",
+            emptyString: "Keine Winddaten verfügbar",
+            speedUnit: "k/h"
+        },
+        data: jsondata, // daten aus https://geographie.uibk.ac.at/data/ecmwf/data/wind-10u-10v-europe.json
+        minVelocity: 0,
+        maxVelocity: 20,
+        velocityScale: 0.015,
+        lineWidth: 1.5,
+
+
+        opacity: 0.97
+    }).addTo(overlays.wind);
 }
 
 
@@ -126,11 +131,11 @@ async function showWindDir() {
 
 
 
-    
 
 
 
-    
+
+
 
 //auf Kartenklick reagieren
 map.on("click", function (evt) {  //latlng über klick holen
